@@ -1,7 +1,8 @@
-from telegram import Update
-from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
-import json
 import os
+import json
+import asyncio
+from telegram import Update
+from telegram.ext import Application, CommandHandler, ContextTypes
 
 DATA_FILE = "videos.json"
 
@@ -47,23 +48,29 @@ async def get_movie(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if movie_name in data:
         movie = data[movie_name]
-        reply = f"🎬 *{movie_name.title()}*\n\n▶️ [Watch Online]({movie['watch']})\n📥 [Download]({movie['download']})"
+        reply = (
+            f"🎬 *{movie_name.title()}*\n\n"
+            f"▶️ [Watch Online]({movie['watch']})\n"
+            f"📥 [Download]({movie['download']})"
+        )
         await update.message.reply_text(reply, parse_mode="Markdown", disable_web_page_preview=True)
     else:
         await update.message.reply_text(f"❌ Movie '{movie_name}' not found!")
 
-# Bot start point
-def main():
-    import os
-    TOKEN = os.environ["BOT_TOKEN"]
+# Async main function
+async def main():
+    TOKEN = os.environ.get("BOT_TOKEN")
+    if not TOKEN:
+        raise RuntimeError("BOT_TOKEN environment variable not set!")
 
-    app = ApplicationBuilder().token(TOKEN).build()
+    app = Application.builder().token(TOKEN).build()
 
     app.add_handler(CommandHandler("add", add_movie))
     app.add_handler(CommandHandler("get", get_movie))
 
     print("✅ Bot is running...")
-    app.run_polling()
+    await app.run_polling()
 
+# Run async main
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
