@@ -54,9 +54,8 @@ async def get_movie(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # Bot start point
 def main():
-    from dotenv import load_dotenv
-    load_dotenv()
-    TOKEN = os.getenv("BOT_TOKEN")
+    import os
+    TOKEN = os.environ["BOT_TOKEN"]
 
     app = ApplicationBuilder().token(TOKEN).build()
 
