@@ -43,7 +43,7 @@ async def get_movie(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(f"🎬 *{name}*", reply_markup=reply_markup, parse_mode="Markdown")
 
 def main():
-    TOKEN = os.getenv("8308772553:AAHPteT2VFqpQWCMHGucoC_h1stwGCNPeQo")
+    TOKEN = os.getenv("8308772553:AAH7UczsM9zMttok86AKSWNMSz3Wt-bkXGo")
     app = ApplicationBuilder().token(TOKEN).build()
 
     app.add_handler(CommandHandler("add", add_movie))
